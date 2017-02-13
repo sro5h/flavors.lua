@@ -47,12 +47,12 @@ function applyCopy(src, dest, file)
     if type(file.src) ~= "table" then
         -- copy from one source to one or more destinations
         for _, destDir in ipairs(file.dest) do
-            print("Copying file '" .. file.src .. "' to '" .. dest .. "/" .. destDir .. "'.")
             File.copyBinary(src .. "/" .. file.src, dest .. "/" .. destDir)
+            print("Success: copying '" .. file.src .. "' to '" .. dest .. "/" .. destDir .. "'.")
         end
     else
         if #file.src ~= #file.dest then
-            print("Number of directories doesn't match, ommiting redundant directories")
+            print("Warning: ommiting redundant directories")
         end
         -- set size to the smaller size
         local size
@@ -63,8 +63,8 @@ function applyCopy(src, dest, file)
         end
         -- copy all files from 'src' to 'dest' that have a match
         for i=1, size do
-            print("Copying file '" .. file.src[i] .. "' to '" .. dest .. "/" .. file.dest[i] .. "'.")
             File.copyBinary(src .. "/" .. file.src[i], dest .. "/" .. file.dest[i])
+            print("Success: copying '" .. file.src[i] .. "' to '" .. dest .. "/" .. file.dest[i] .. "'.")
         end
 
     end
@@ -85,10 +85,10 @@ function applySubs(src, file)
 
     for _, sub in pairs(file.subs) do
         for _, dir in pairs(file.src) do
-            print("Substituting strings in file '" .. src .. "/" .. dir .. "'.")
             local content = File.read(src .. "/" .. dir)
             content = content:gsub(sub.replace, sub.with)
             File.write(src .. "/" .. dir, content, 'wb')
+            print("Success: substituting '" .. sub.replace .. "' in '" .. src .. "/" .. dir .. "'.")
         end
     end
 end
@@ -119,9 +119,9 @@ function applyFlavor(flavor)
             end
         end
 
-        print("Applied flavor " .. flavor .. ".")
+        print("Done: applied flavor " .. flavor .. ".")
     else
-        print("Flavor '" .. flavor .. "' doesn't exist.")
+        print("Error: flavor '" .. flavor .. "' doesn't exist.")
     end
 end
 
