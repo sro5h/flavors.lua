@@ -44,7 +44,7 @@ local MODE_SUBSTITUTE = "substitute"
 
 -- ### applyCopy
 --
--- Function to copy a 'file'
+-- Function to copy all files specified by 'src' and 'dest' in 'file'
 --
 -- - 'src'  is a string
 -- - 'dest' is a string
@@ -52,8 +52,35 @@ local MODE_SUBSTITUTE = "substitute"
 --
 function applyCopy(src, dest, file)
     file.dest = file.dest or file.src
-    print("Copying file '" .. file.src .. "' to '" .. dest .. "/" .. file.dest .. "'.")
-    File.copyBinary(src .. "/" .. file.src, dest .. "/" .. file.dest)
+    if type(file.dest) ~= "table" then
+        file.dest = { file.dest }
+    end
+
+    if type(file.src) ~= "table" then
+        -- copy from one source to one or more destinations
+        for _, destDir in ipairs(file.dest) do
+            print("Copying file '" .. file.src .. "' to '" .. dest .. "/" .. destDir .. "'.")
+            File.copyBinary(src .. "/" .. file.src, dest .. "/" .. destDir)
+        end
+    else
+        if #file.src ~= #file.dest then
+            print("Number directories doesn't match, ommiting redundant directories")
+        end
+        -- set size to the smaller size
+        local size
+        if #file.src < #file.dest then
+            size = #file.src
+        else
+            size = #file.dest
+        end
+        -- copy all files from 'src' to 'dest' that have a match
+        for i=1, size do
+            print("Copying file '" .. file.src[i] .. "' to '" .. dest .. "/" .. file.dest[i] .. "'.")
+            File.copyBinary(src .. "/" .. file.src[i], dest .. "/" .. file.dest[i])
+        end
+
+    end
+
 end
 
 -- ### applySubs
