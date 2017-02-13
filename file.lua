@@ -92,10 +92,6 @@ function file.copyBinary(src, dest)
     file.write(dest, content, "wb")
 end
 
-function file.copyBinaryFiles(src, dest, files)
-
-end
-
 -- ### file.move
 --
 -- Move the file from `src` to the `dest`.
