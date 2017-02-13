@@ -4,7 +4,7 @@
 --
 -- Simple flavor managment for projects
 --
--- **Version:** 0.1.0.0
+-- **Version:** 0.2.0.0
 -- **License:** MIT
 -- **Source:** [Github](https://github.com/sro5h/flavors.lua)
 --
