@@ -30,19 +30,45 @@ Usage: flavors.lua [flavor]
 --
 local FILE_FLAVOR = "flavor.json"
 
--- ### copyFiles
+-- ### MODE_COPY
 --
--- Function to copy all 'files' from 'src' to 'dest'.
+-- The copy mode.
 --
--- - 'src'   is a string
--- - 'dest'  is a string
--- - 'files' is a table
+local MODE_COPY = "copy"
+
+-- ### MODE_SUBSTITUTE
 --
-function copyFiles(src, dest, files)
-    for _, file in pairs(files) do
-        -- if no dest name is specified use src
-        file.dest = file.dest or file.src
-        File.copyBinary(src .. "/" .. file.src, dest .. "/" .. file.dest)
+-- The substitution mode
+--
+local MODE_SUBSTITUTE = "substitute"
+
+-- ### applyCopy
+--
+-- Function to copy a 'file'
+--
+-- - 'src'  is a string
+-- - 'dest' is a string
+-- - 'file' is a table
+--
+function applyCopy(src, dest, file)
+    file.dest = file.dest or file.src
+    print("Copying file '" .. file.src .. "' to '" .. dest .. "/" .. file.dest .. "'.")
+    File.copyBinary(src .. "/" .. file.src, dest .. "/" .. file.dest)
+end
+
+-- ### applySubs
+--
+-- Function to apply all substitutions to the 'file' using string:gsub
+--
+-- - 'src'  is a string
+-- - 'file' is a table
+--
+function applySubs(src, file)
+    print("Substituting strings in file '" .. src .. "/" .. file.src .. "'.")
+    for _, sub in pairs(file.subs) do
+        local content = File.read(src .. "/" .. file.src)
+        content = content:gsub(sub.replace, sub.with)
+        File.write(src .. "/" .. file.src, content, 'wb')
     end
 end
 
@@ -55,13 +81,25 @@ end
 function applyFlavor(flavor)
     -- check if flavor exists
     if File.exists(flavor .. "/" .. FILE_FLAVOR) then
-        print("Flavor exists")
+        print("Applying flavor '" .. flavor .. "'.")
         -- parse the configuration file
         local configData = File.read(flavor .. "/" .. FILE_FLAVOR)
         local config = Json:decode(configData)
         if config.project then
-            -- copy all specified files to according locations
-            copyFiles(flavor, config.project, config.files)
+            for _, file in pairs(config.files) do
+                -- default to copy mode
+                file.mode = file.mode or MODE_COPY
+
+                if file.mode == MODE_COPY then
+                    -- copy the file
+                    applyCopy(flavor, config.project, file)
+                elseif file.mode == MODE_SUBSTITUTE then
+                    -- substitue the specified strings
+                    applySubs(config.project, file)
+                else
+                    print("Invalid mode for file '" .. file.src .. "'.")
+                end
+            end
         end
 
         print("Applied flavor " .. flavor .. ".")
