@@ -1,4 +1,14 @@
 #!/usr/bin/env lua
+--
+-- # flavors
+--
+-- Simple flavor managment for projects
+--
+-- **Version:** 0.1.0.0
+-- **License:** MIT
+-- **Source:** [Github](https://github.com/sro5h/flavors.lua)
+--
+
 local Json = require("JSON")
 local File = require("file")
 
