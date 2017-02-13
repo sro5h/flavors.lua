@@ -79,11 +79,17 @@ end
 -- - 'file' is a table
 --
 function applySubs(src, file)
-    print("Substituting strings in file '" .. src .. "/" .. file.src .. "'.")
+    if type(file.src) ~= "table" then
+        file.src = { file.src }
+    end
+
     for _, sub in pairs(file.subs) do
-        local content = File.read(src .. "/" .. file.src)
-        content = content:gsub(sub.replace, sub.with)
-        File.write(src .. "/" .. file.src, content, 'wb')
+        for _, dir in pairs(file.src) do
+            print("Substituting strings in file '" .. src .. "/" .. dir .. "'.")
+            local content = File.read(src .. "/" .. dir)
+            content = content:gsub(sub.replace, sub.with)
+            File.write(src .. "/" .. dir, content, 'wb')
+        end
     end
 end
 
