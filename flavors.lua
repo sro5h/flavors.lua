@@ -52,7 +52,7 @@ function applyCopy(src, dest, file)
         end
     else
         if #file.src ~= #file.dest then
-            print("Number directories doesn't match, ommiting redundant directories")
+            print("Number of directories doesn't match, ommiting redundant directories")
         end
         -- set size to the smaller size
         local size
