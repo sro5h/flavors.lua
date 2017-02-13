@@ -30,18 +30,6 @@ Usage: flavors.lua [flavor]
 --
 local FILE_FLAVOR = "flavor.json"
 
--- ### MODE_COPY
---
--- The copy mode.
---
-local MODE_COPY = "copy"
-
--- ### MODE_SUBSTITUTE
---
--- The substitution mode
---
-local MODE_SUBSTITUTE = "substitute"
-
 -- ### applyCopy
 --
 -- Function to copy all files specified by 'src' and 'dest' in 'file'
@@ -114,17 +102,13 @@ function applyFlavor(flavor)
         local config = Json:decode(configData)
         if config.project then
             for _, file in pairs(config.files) do
-                -- default to copy mode
-                file.mode = file.mode or MODE_COPY
-
-                if file.mode == MODE_COPY then
-                    -- copy the file
-                    applyCopy(flavor, config.project, file)
-                elseif file.mode == MODE_SUBSTITUTE then
+                -- decide whether copying or substituting
+                if file.subs then
                     -- substitue the specified strings
                     applySubs(config.project, file)
                 else
-                    print("Invalid mode for file '" .. file.src .. "'.")
+                    -- copy the file(s)
+                    applyCopy(flavor, config.project, file)
                 end
             end
         end
