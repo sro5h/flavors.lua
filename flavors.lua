@@ -21,7 +21,7 @@ local File = require("file")
 local HELP = [[
 Usage: flavors.lua [flavor]
     [flavor]:
-        Needs to be a subdir containing a flavor.json
+        Needs to be a directory containing a flavor.json
 ]]
 
 -- ### FILE_FLAVOR
