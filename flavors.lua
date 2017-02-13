@@ -11,8 +11,8 @@
 
 -- ## Modules
 --
-local Json = require("JSON")
-local File = require("file")
+local Json = require("lib.json")
+local File = require("lib.file")
 
 -- ### HELP
 --
