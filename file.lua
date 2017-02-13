@@ -3,7 +3,7 @@
 --
 -- Basic file functions for Lua.
 --
--- **License:** MIT  
+-- **License:** MIT
 --  **Source:** [GitHub](https://github.com/gummesson/file.lua)
 --
 
@@ -77,6 +77,23 @@ end
 function file.copy(src, dest)
   local content = file.read(src)
   file.write(dest, content)
+end
+
+-- ### file.copyBinary
+--
+-- Copy the file by reading the 'src' and writing it as a binary file
+-- to the 'dest'.
+--
+-- - 'src'  is a string
+-- - 'dest' is a string
+--
+function file.copyBinary(src, dest)
+    local content = file.read(src)
+    file.write(dest, content, "wb")
+end
+
+function file.copyBinaryFiles(src, dest, files)
+
 end
 
 -- ### file.move
