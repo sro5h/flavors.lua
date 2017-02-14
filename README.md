@@ -36,20 +36,20 @@ Now you can run `lua flavor.lua [flavor1|flavor2]` to apply one of the flavors.
 ## Advanced
 
 ### Copying
-If you followed the Getting started guide, you could see that the path specified in the `src` element is both relative to the *project* and *flavor* directory. To copy the file to a different destination use the `dest` element
+If you followed the Getting started guide, you could see that the path specified in the `src` element is both relative to the *project* and *flavor* directory. To copy the file to a different destination use the `dst` element
 ~~~ json
 {
     "project" : "path/to/project",
     "files" : [
         {
             "src" : "icon.png",
-            "dest" : "res/icon.png"
+            "dst" : "res/icon.png"
         }
     ]
 }
 ~~~
-The `dest` element also accepts an array of paths to allow copying one file to different locations. E.g. `"dest" : [ "res/icon.png", "res2/icon.png" ]`.
-In some cases, e.g. android development, you have different versions of a file with the same name in different subdirectories, therefor both `dest` *and* `src` accept arrays of paths. Note though that files will be matched 1:1 in the order you write them and redundant files will be omitted. E.g.
+The `dst` element also accepts an array of paths to allow copying one file to different locations. E.g. `"dst" : [ "res/icon.png", "res2/icon.png" ]`.
+In some cases, e.g. android development, you have different versions of a file with the same name in different subdirectories, therefor both `dst` *and* `src` accept arrays of paths. Note though that files will be matched 1:1 in the order you write them and redundant files will be omitted. E.g.
 ~~~ json
 {
     "project" : "path/to/project",
@@ -59,7 +59,7 @@ In some cases, e.g. android development, you have different versions of a file w
                 "res/drawable-mdpi/icon.png",
                 "res/drawable-hdpi/icon.png"
             ],
-            "dest" : [
+            "dst" : [
                 "res/drawable-mdpi/icon.png",
                 "res/drawable-hdpi/icon.png",
                 "res/drawable-xdpi/icon.png"
@@ -68,7 +68,7 @@ In some cases, e.g. android development, you have different versions of a file w
     ]
 }
 ~~~
-Assuming the file above, the `drawable-mdpi` and `drawable-hdpi` directories will be matched and the `drawable-xdpi` directory in `dest` will be ignored because it has no matching `src` directory.
+Assuming the file above, the `drawable-mdpi` and `drawable-hdpi` directories will be matched and the `drawable-xdpi` directory in `dst` will be ignored because it has no matching `src` directory.
 
 ### Substitution
 You can also substitute strings in files using [lua patterns](https://www.lua.org/pil/20.2.html). To perform such a substitution you need to add an object to the `files` array that has a `src` element and an array `subs` that defines the substitutions to perform. E.g.

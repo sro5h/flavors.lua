@@ -4,7 +4,7 @@
 --
 -- Simple flavor managment for projects
 --
--- **Version:** 0.3.3
+-- **Version:** 0.4.0
 -- **License:** MIT
 -- **Source:** [Github](https://github.com/sro5h/flavors.lua)
 --
@@ -32,39 +32,39 @@ local FILE_FLAVOR = "flavor.json"
 
 -- ### applyCopy
 --
--- Function to copy all files specified by 'src' and 'dest' in 'file'
+-- Function to copy all files specified by 'src' and 'dst' in 'file'
 --
 -- - 'src'  is a string
--- - 'dest' is a string
+-- - 'dst' is a string
 -- - 'file' is a table
 --
-function applyCopy(src, dest, file)
-    file.dest = file.dest or file.src
-    if type(file.dest) ~= "table" then
-        file.dest = { file.dest }
+function applyCopy(src, dst, file)
+    file.dst = file.dst or file.src
+    if type(file.dst) ~= "table" then
+        file.dst = { file.dst }
     end
 
     if type(file.src) ~= "table" then
         -- copy from one source to one or more destinations
-        for _, destDir in ipairs(file.dest) do
-            File.copyBinary(src .. "/" .. file.src, dest .. "/" .. destDir)
-            print("Success: copying '" .. file.src .. "' to '" .. dest .. "/" .. destDir .. "'.")
+        for _, dstDir in ipairs(file.dst) do
+            File.copyBinary(src .. "/" .. file.src, dst .. "/" .. dstDir)
+            print("Success: copying '" .. file.src .. "' to '" .. dst .. "/" .. dstDir .. "'.")
         end
     else
-        if #file.src ~= #file.dest then
+        if #file.src ~= #file.dst then
             print("Warning: ommiting redundant directories")
         end
         -- set size to the smaller size
         local size
-        if #file.src < #file.dest then
+        if #file.src < #file.dst then
             size = #file.src
         else
-            size = #file.dest
+            size = #file.dst
         end
-        -- copy all files from 'src' to 'dest' that have a match
+        -- copy all files from 'src' to 'dst' that have a match
         for i=1, size do
-            File.copyBinary(src .. "/" .. file.src[i], dest .. "/" .. file.dest[i])
-            print("Success: copying '" .. file.src[i] .. "' to '" .. dest .. "/" .. file.dest[i] .. "'.")
+            File.copyBinary(src .. "/" .. file.src[i], dst .. "/" .. file.dst[i])
+            print("Success: copying '" .. file.src[i] .. "' to '" .. dst .. "/" .. file.dst[i] .. "'.")
         end
 
     end
